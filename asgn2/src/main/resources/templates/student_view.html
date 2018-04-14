@@ -1,0 +1,22 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Student</title>
+    <link th:href="@{/css/student_view.css}" rel = "stylesheet" >
+    <script th:src = "@{/js/student_scripts.js}" type = "   text/javascript"></script>
+</head>
+<body>
+
+<section class = "container">
+    <div class = "leftPane">
+        <button class = "button roundedCorner" onclick = "hide()">Profile</button>
+        <button class = "button roundedCorner" onClick = "display()">View Grades</button>
+        <button class = "button roundedCorner" onclick = "hide()">Enrol</button>
+        <button class = "button roundedCorner" onclick = "hide()">Update profile</button>
+    </div>
+
+    <iframe id = "grades" th:src = "@{http://localhost:8083/asgn2/student/view}"></iframe>
+</section>
+</body>
+
+</html>

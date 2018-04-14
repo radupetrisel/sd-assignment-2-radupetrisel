@@ -1,0 +1,36 @@
+.leftPane {
+
+    position: fixed;
+    left: 1%;
+    width: 4%;
+    margin-top: 5%;
+    align-items: center;
+}
+
+.button {
+
+    align-self: flex-start;
+    margin: 5%;
+    padding: 1%;
+}
+
+.roundedCorner {
+
+    border-radius: 10%;
+}
+
+#grades {
+
+    position = fixed;
+    margin-top: 5%;
+    margin-left: 6%;
+    padding: 1%;
+    float: left;
+    border-width: 0px;
+}
+
+.container {
+
+    width: 80%;
+    height: 30%;
+}
