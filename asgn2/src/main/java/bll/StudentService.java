@@ -1,10 +1,9 @@
 package bll;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import bll.dtos.StudentDto;
 import dao.entities.Student;
 import dao.repositories.StudentRepository;
 
@@ -14,20 +13,27 @@ public class StudentService {
 	@Autowired
 	private StudentRepository repo;
 	
-	public void save(Student s) {
+	public StudentDto profile(int id) {
 		
-		repo.save(s);
+		return new StudentDto(repo.findById(id));
+	}
+	
+	public void updatePassword() {
+		
+		
 		
 	}
 	
-	public List<Student> findAll(){
+	public void updateAddress() {
 		
-		return repo.findAll();
+	}
+
+	public String viewGrades() {
+		return null;
 	}
 	
-	public Student findById(int id) {
+	public void enrol() {
 		
-		return (Student)repo.findById(id).get();
 	}
 	
 	

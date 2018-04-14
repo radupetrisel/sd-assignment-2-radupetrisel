@@ -1,19 +1,17 @@
 package pl.controllers;
 
-import java.io.IOException;
+import static bll.JsonConverter.convertJSON;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import bll.StudentService;
-import dao.entities.Student;
+import bll.dtos.StudentDto;
+
 
 @Controller
 @RequestMapping("/student")
@@ -22,41 +20,31 @@ public class StudentController {
 	@Autowired
 	private StudentService service;
 	
-	@RequestMapping(value = "/save", consumes = "application/json", method = RequestMethod.POST)
+	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	@ResponseBody
-	public Student save(@RequestBody String json) {
+	public String profile(@RequestParam("id") int id) {
 		
-		ObjectMapper mapper = new ObjectMapper();
+		StudentDto s = service.profile(id);
 		
-		Student s = null;
-		
-		try {
-			System.out.println(json);
-			s = mapper.readValue(json, Student.class);
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
-
-		service.save(s);
-
-		return s;
+		String str = convertJSON(s);
+		System.out.println(str);
+		return str;
 	}
 	
-	@RequestMapping(value = "/view", method = RequestMethod.GET)
-	@ResponseBody
-	public String list() {
+	public void updatePassword() {
 		
-		Student s = service.findById(1);
-		String studentJSON = null;
+	}
+	
+	public void updateAddress() {
 		
-		ObjectMapper mapper = new ObjectMapper();
-		try {
-			studentJSON = mapper.writeValueAsString(s);
-		} catch (JsonProcessingException e) {
-			e.printStackTrace();
-		}
-		
-		return studentJSON;
 	}
 
+	public String viewGrades() {
+		return null;
+	}
+	
+	public void enrol() {
+		
+	}
+	
 }

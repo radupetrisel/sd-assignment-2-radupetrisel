@@ -13,7 +13,7 @@ import javax.persistence.Table;
 public class Student extends User {
 
 	@ManyToMany
-	@JoinTable(name = "enrols", joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "course_id", referencedColumnName = "id"))
+	@JoinTable(name = "enrols", joinColumns = @JoinColumn(name = "student", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "course", referencedColumnName = "id"))
 	private List<Course> courses;
 
 	public List<Course> getCourses() {
