@@ -1,45 +1,49 @@
 package pl.controllers;
 
-import static bll.JsonConverter.convertJSON;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import bll.StudentService;
+import bll.dtos.CourseDto;
 import bll.dtos.StudentDto;
 
 
 @Controller
 @RequestMapping("/student")
-public class StudentController {
+public class StudentController{
 
 	@Autowired
 	private StudentService service;
 	
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
-	@ResponseBody
-	public String profile(@RequestParam("id") int id) {
+	public @ResponseBody StudentDto viewProfile(@RequestParam("id") int id) {
 		
-		StudentDto s = service.profile(id);
-		
-		String str = convertJSON(s);
-		System.out.println(str);
-		return str;
-	}
-	
-	public void updatePassword() {
-		
-	}
-	
-	public void updateAddress() {
-		
-	}
+		StudentDto s = service.getProfile(id);
 
-	public String viewGrades() {
+		return s;
+	}
+	
+	@RequestMapping(value = "/updateAddress", method = RequestMethod.POST)
+	public @ResponseBody String updateAddress(@RequestBody StudentDto student) {
+		
+		service.updateAddress(student.getId(), student.getAddress());
+		return "success";
+	}
+	
+	@RequestMapping(value = "/viewGrades", method = RequestMethod.GET)
+	public @ResponseBody Map<CourseDto, Integer> viewGrades(@RequestParam("id") int id) {
+		
+		Map<CourseDto, Integer> map = service.viewGrades(id);
+		
+		System.out.println(map);
+		
 		return null;
 	}
 	

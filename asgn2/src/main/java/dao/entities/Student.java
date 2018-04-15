@@ -1,35 +1,30 @@
 package dao.entities;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "students")
 public class Student extends User {
-
-	@ManyToMany
-	@JoinTable(name = "enrols", joinColumns = @JoinColumn(name = "student", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "course", referencedColumnName = "id"))
-	private List<Course> courses;
+	
+	@Transient
+	private List<Enrol> enrols;
 
 	public List<Course> getCourses() {
-		return courses;
+		return enrols.stream().map(e -> e.getCourse()).collect(Collectors.toList());
 	}
 
-	public void setCourses(List<Course> courses) {
-		this.courses = courses;
+	public void setCourses(List<Enrol> enrols) {
+		this.enrols = enrols;
 	}
-
-	public void removeCourse(Course c) {
-		this.courses.remove(c);
-	}
-
+	
 	public void addCourse(Course c) {
-		this.courses.add(c);
+		this.enrols.add(new Enrol(this, c));
 	}
+	
 
 }

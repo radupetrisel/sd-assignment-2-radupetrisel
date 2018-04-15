@@ -9,6 +9,10 @@ public class TeacherDto extends UserDto{
 
 	private List<Course> courses;
 	
+	public TeacherDto() {
+		
+	}
+	
 	public TeacherDto(Teacher t) {
 		super(t);
 		this.setCourses(t.getCourses());

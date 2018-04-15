@@ -13,6 +13,10 @@ public abstract class UserDto {
 	protected String cnp;
 	protected String password;
 	
+	public UserDto() {
+		
+	}
+	
 	public UserDto(User u) {
 		
 		this.id = u.getId();

@@ -1,30 +1,27 @@
 package dao.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
+import java.io.Serializable;
 
-@Entity
-@Table(name = "enrols")
-public class Enrol {
-	
-	@Id
-	@GeneratedValue
-	private int id;
-	
-	@Column
-	private int grade;
+import javax.persistence.Embeddable;
+import javax.persistence.ManyToOne;
+
+@Embeddable
+public class Enrol implements Serializable{
 	
 	@ManyToOne
-	@MapsId("id")
-	@JoinColumn(name = "student")
 	private Student student;
 	
+	@ManyToOne
+	private Course course;
+
+	public Enrol() {
+		
+	}
+	
+	public Enrol(Student student, Course course) {
+		this.student = student;
+		this.course = course;
+	}
 	public Student getStudent() {
 		return student;
 	}
@@ -39,27 +36,6 @@ public class Enrol {
 
 	public void setCourse(Course course) {
 		this.course = course;
-	}
-
-	@ManyToOne
-	@MapsId("id")
-	@JoinColumn(name = "course")
-	private Course course;
-
-	public int getGrade() {
-		return grade;
-	}
-
-	public void setGrade(int grade) {
-		this.grade = grade;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 }

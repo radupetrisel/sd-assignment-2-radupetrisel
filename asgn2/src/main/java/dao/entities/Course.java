@@ -1,15 +1,16 @@
 package dao.entities;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "courses")
@@ -26,14 +27,14 @@ public class Course {
 	@JoinColumn(name = "teacher_id")
 	private Teacher teacher;
 	
-	@ManyToMany(mappedBy = "courses")
-	private List<Student> students;
+	@Transient
+	private List<Enrol> students;
 	
 	public List<Student> getStudents() {
-		return students;
+		return students.stream().map(s -> s.getStudent()).collect(Collectors.toList());
 	}
 
-	public void setStudents(List<Student> students) {
+	public void setStudents(List<Enrol> students) {
 		this.students = students;
 	}
 
