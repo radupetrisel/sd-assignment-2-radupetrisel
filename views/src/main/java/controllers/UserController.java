@@ -59,7 +59,7 @@ public abstract class UserController {
 	protected VBox displayHelloMessage() {
 		
 		String json = get(basePath + "/profile");
-
+		
 		Map<String, String> data = null;
 		
 		try {

@@ -54,7 +54,7 @@ public class StudentService {
 
 			Student s = studentRepo.getOne(studentId);
 
-			Course c = courseRepo.findByName(courseName).get(0);
+			Course c = courseRepo.findByName(courseName);
 
 			s.addCourse(c);
 

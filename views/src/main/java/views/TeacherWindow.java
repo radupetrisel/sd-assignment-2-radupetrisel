@@ -10,7 +10,6 @@ import javafx.stage.Stage;
 public class TeacherWindow extends UserWindow {
 
 	private Button createStudent;
-	private Button deleteStudent;
 	private Button gradeStudent;
 	private Button viewStudent;
 	
@@ -24,21 +23,16 @@ public class TeacherWindow extends UserWindow {
 		right.setSpacing(10);
 
 		createStudent = new Button("Add student");
-		deleteStudent = new Button("Delete student");
 		gradeStudent = new Button("Mark student");
 		viewStudent = new Button("View student");
 
-		right.getChildren().addAll(createStudent, gradeStudent, viewStudent, deleteStudent);
+		right.getChildren().addAll(createStudent, gradeStudent, viewStudent);
 
 		this.setRight(right);
 	}
 	
 	public void setCreateStudentHandler(EventHandler<ActionEvent> e) {
 		this.createStudent.setOnAction(e);
-	}
-	
-	public void setDeleteStudentHandler(EventHandler<ActionEvent> e) {
-		this.deleteStudent.setOnAction(e);
 	}
 	
 	public void setGradeStudentHandler(EventHandler<ActionEvent> e) {

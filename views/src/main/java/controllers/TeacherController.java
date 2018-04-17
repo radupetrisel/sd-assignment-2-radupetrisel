@@ -3,15 +3,22 @@ package controllers;
 import static services.Requester.get;
 import static services.Requester.post;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import javafx.collections.FXCollections;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
@@ -24,9 +31,13 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.converter.DefaultStringConverter;
+import services.ColumnBuilder;
+import services.GroupConverter;
 import services.StudentConverter;
-import services.StudentObserver;
+import services.StudentReport;
 import services.TableBuilder;
+import tableItems.Group;
 import tableItems.Student;
 import views.TeacherWindow;
 
@@ -40,6 +51,7 @@ public class TeacherController extends UserController {
 		this.window.setTop(this.displayHelloMessage());
 		window.setCreateStudentHandler(e -> createStudent());
 		window.setViewStudentHandler(e -> viewStudents());
+		window.setGradeStudentHandler(e -> gradeStudents());
 	}
 
 	private void createStudent() {
@@ -125,93 +137,7 @@ public class TeacherController extends UserController {
 
 		this.window.setCenter(bigBox);
 	}
-
-	// private void deleteStudent() {
-	//
-	// Stage delete = new Stage();
-	// delete.initModality(Modality.APPLICATION_MODAL);
-	//
-	// VBox box = new VBox();
-	// box.setAlignment(Pos.CENTER);
-	//
-	// Scene scene = new Scene(box, 200, 100);
-	//
-	// TextField firstName = new TextField();
-	// firstName.setPromptText("First name");
-	//
-	// TextField lastName = new TextField();
-	// lastName.setPromptText("Last name");
-	//
-	// Button del = new Button("Delete");
-	//
-	// box.getChildren().addAll(firstName, lastName, del);
-	//
-	// del.setOnAction(e -> {
-	//
-	// TeacherBL tbl = new TeacherBL();
-	//
-	// tbl.deleteStudent(tbl.findStudentByName(firstName.getText(),
-	// lastName.getText()));
-	//
-	// delete.close();
-	// });
-	//
-	// delete.setScene(scene);
-	// delete.showAndWait();
-	// }
-	//
-	// private void gradeStudent() {
-	//
-	// HBox box = new HBox();
-	// box.setAlignment(Pos.CENTER);
-	// box.setSpacing(10);
-	//
-	// TextField firstName = new TextField();
-	// firstName.setPromptText("First name");
-	//
-	// TextField lastName = new TextField();
-	// lastName.setPromptText("Last name");
-	//
-	// TextField course = new TextField();
-	// course.setPromptText("Course");
-	//
-	// TextField grade = new TextField();
-	// grade.setPromptText("Grade");
-	//
-	// box.getChildren().addAll(firstName, lastName, course, grade);
-	//
-	// box.setOnKeyPressed(e -> {
-	//
-	// if (e.getCode().equals(KeyCode.ENTER)) {
-	//
-	// TeacherBL tbl = new TeacherBL();
-	// tbl.giveMarkToStudent(course.getText(),
-	// tbl.findStudentByName(firstName.getText(), lastName.getText()),
-	// Integer.parseInt(grade.getText()));
-	//
-	// Stage alert = new Stage();
-	// alert.initModality(Modality.APPLICATION_MODAL);
-	//
-	// VBox vbox = new VBox();
-	// Scene alertS = new Scene(vbox, 100, 100);
-	//
-	// vbox.getChildren().add(new Text("Success"));
-	//
-	// Button ok = new Button("Ok");
-	//
-	// vbox.getChildren().add(ok);
-	//
-	// ok.setOnAction(a -> alert.close());
-	//
-	// alert.setScene(alertS);
-	// alert.showAndWait();
-	// }
-	//
-	// });
-	//
-	// this.setCenter(box);
-	// }
-	//
+	
 	private void viewStudents() {
 
 		HBox initBox = new HBox();
@@ -227,7 +153,7 @@ public class TeacherController extends UserController {
 			if (e.getCode().equals(KeyCode.ENTER)) {
 
 				String data = get(basePath + "/viewStudents?group=" + group.getText());
-				displayStudents(data);
+				viewStudents(data);
 			}
 		});
 
@@ -236,52 +162,194 @@ public class TeacherController extends UserController {
 		this.window.setCenter(initBox);
 	}
 
-	private void displayStudents(String data) {
+	private void viewStudents(String data) {
 
-		List<Student> students = new StudentConverter().convert(data);
+		List<Student> students = new StudentConverter().convertList(data);
+			
+		DefaultStringConverter converter = new DefaultStringConverter();
+		EventHandler<CellEditEvent<Student, String>> eventHandler = e -> {
+			
+			Student s = e.getRowValue();
+			JSONObject jo = new JSONObject();
+			
+			switch(e.getTableColumn().getText()) {
+			
+			case "Address":
+				s.setAddress(e.getNewValue());
+				break;
+			
+			case "Phone":
+				s.setPhoneNumber(e.getNewValue());
+				break;
+			case "Email":
+				s.setEmail(e.getNewValue());
+				break;
+			}
+			
+			try {
+				jo.put("address", s.getAddress())
+				.put("phoneNumber", s.getPhoneNumber())
+				.put("email", s.getEmail())
+				.put("cnp", s.getCnp());
+				
+				post(basePath + "/updateStudent", jo.toString());
+			} catch (JSONException e1) {
+				e1.printStackTrace();
+			}
+			
+			
+		};
 		
-		EventHandler<CellEditEvent<Student, String>> event = e -> {
-							
-				Student student = e.getRowValue();
-				
-				switch(e.getTableColumn().getText()) {
-					case "Address":
-						student.setAddress(e.getNewValue());
-						break;
-					case "Phone":
-						student.setPhoneNumber(e.getNewValue());
-						break;
-					case "Email":
-						student.setEmail(e.getNewValue());
-						break;
-				}
-				
-				try {
-					
-					JSONObject jo = new JSONObject()
-							.put("address", student.getAddress())
-							.put("phoneNumber", student.getPhoneNumber())
-							.put("email", student.getEmail())
-							.put("cnp", student.getCnp());
-					
-					post(basePath + "/updateStudent", jo.toString());
-					
-				} catch (JSONException e1) {
-					e1.printStackTrace();
-				}
-
-			};
-
-		TableView<Student> table = new TableBuilder<Student>().addColumn("First name", "firstName", false)
-				.addColumn("Last name", "lastName", false).addColumn("CNP", "cnp", false)
-				.addColumn("Address", "address", event)
-				.addColumn("Phone", "phoneNumber", event)
-				.addColumn("Email", "email", event)
-				.setEditable(true)
+		TableView<Student> table = new TableBuilder<Student>()
+				.addColumn(new ColumnBuilder<Student, String>()
+						.name("First Name")
+						.cellValueFactory("firstName")
+						.build())
+				.addColumn(new ColumnBuilder<Student, String>()
+						.name("Last Name")
+						.cellValueFactory("lastName")
+						.build())
+				.addColumn(new ColumnBuilder<Student, String>()
+						.name("CNP")
+						.cellValueFactory("cnp")
+						.build())
+				.addColumn(new ColumnBuilder<Student, String>()
+						.name("Address")
+						.cellValueFactory("address")
+						.unsortable()
+						.editable(converter)
+						.onEditCommit(eventHandler)
+						.build())
+				.addColumn(new ColumnBuilder<Student, String>()
+						.name("Phone")
+						.cellValueFactory("phoneNumber")
+						.unsortable()
+						.editable(converter)
+						.onEditCommit(eventHandler)
+						.build())
+				.addColumn(new ColumnBuilder<Student, String>()
+						.name("Email")
+						.cellValueFactory("email")
+						.unsortable()
+						.onEditCommit(eventHandler)
+						.editable(converter)
+						.build())
+				.editable()
 				.setItems(students)
 				.build();
+		
+		VBox box = new VBox();
+		box.setAlignment(Pos.CENTER);
+		box.setSpacing(7);
+		
+		box.getChildren().add(table);
+		
+		Button generateReport = new Button("Generate report");
+		
+		box.getChildren().add(generateReport);
+		
+		generateReport.setOnAction(e -> {
+			
+			StudentReport report = new StudentReport(table.getSelectionModel().getSelectedItem(), LocalDateTime.now());
+			try {
+				String json = new ObjectMapper().writeValueAsString(report);
+				System.out.println(json);
+				post(basePath + "/saveReport", json);
+			} catch (JsonProcessingException e1) {
+				e1.printStackTrace();
+			}
+			
+		});
+		this.window.setCenter(box);
+	}
+	
+	private void gradeStudents() {
+		
+		HBox initBox = new HBox();
+		initBox.setAlignment(Pos.CENTER);
+		initBox.setSpacing(7);
 
-		this.window.setCenter(table);
+		ComboBox<String> groupComboBox = new ComboBox<String>();
+		ComboBox<String> studentComboBox = new ComboBox<String>(FXCollections.observableArrayList());
+		ComboBox<String> courseComboBox = new ComboBox<String>(FXCollections.observableArrayList());
+		
+		String groupsString = get(basePath + "/groups");
+		
+		List<Group> groups = new GroupConverter().convertList(groupsString);
+		groupComboBox.setItems(FXCollections.observableArrayList(groups.stream().map(g -> g.getNumber()).collect(Collectors.toList())));
+		
+		groupComboBox.setOnAction(e -> {
+			
+			String group = groupComboBox.getValue();
+			
+			List<Student> students = groups.get(group.charAt(group.length() - 1) - '0' - 1).getStudents();
+			studentComboBox.setItems(FXCollections.observableArrayList(students.stream().map(s -> s.getFirstName() + " " + s.getLastName()).collect(Collectors.toList())));		
+		});
+		
+		TextField grade = new TextField();
+		
+		studentComboBox.setOnAction(e -> {
+			
+			String group = groupComboBox.getValue();
+			
+			List<Student> students = groups.get(group.charAt(group.length() - 1) - '0' - 1).getStudents();
+			
+			String[] name = studentComboBox.getValue().split(" ");
+			
+			List<String> courses = students.stream()
+					.filter(s -> s.getFirstName().equals(name[0]) && s.getLastName().equals(name[1]))
+					.map(s -> s.getCourses())
+					.findFirst().get()
+					.stream()
+					.map(s -> s.getCourse())
+					.collect(Collectors.toList());
+			
+		courseComboBox.setItems(FXCollections.observableArrayList(courses));
+			
+		});
+		
+		Button gradeButton = new Button("Grade");
+		
+		gradeButton.setOnAction(e -> {
+			
+			String group = groupComboBox.getValue();
+			
+			List<Student> students = groups.get(group.charAt(group.length() - 1) - '0' - 1).getStudents();
+			
+			String[] name = studentComboBox.getValue().split(" ");
+			
+			String course = courseComboBox.getValue();
+			
+			students.stream()
+					.filter(s -> s.getFirstName().equals(name[0]) && s.getLastName().equals(name[1]))
+					.map(s -> s.getCourses())
+					.findFirst().get()
+					.stream()
+					.filter(gr -> gr.getCourse().equals(course))
+					.forEach(gr -> gr.setGrade(Integer.parseInt(grade.getText())));
+
+			
+			Student student = students.stream()
+					.filter(s -> s.getFirstName().equals(name[0]) && s.getLastName().equals(name[1]))
+					.findFirst().get();
+			
+			
+			String json = null;
+			try {
+				json = new ObjectMapper().writeValueAsString(student);
+			} catch (JsonProcessingException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			
+			System.out.println(json);
+			post(basePath + "/gradeStudent", json);
+			
+		});
+	
+		initBox.getChildren().addAll(groupComboBox, studentComboBox, courseComboBox, grade, gradeButton);
+
+		this.window.setCenter(initBox);
 	}
 
 }

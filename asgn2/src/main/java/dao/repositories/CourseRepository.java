@@ -8,5 +8,5 @@ import dao.entities.Course;
 
 public interface CourseRepository extends JpaRepository<Course, Integer>{
 	
-	public List<Course> findByName(String firstName);
+	public Course findByName(String firstName);
 }

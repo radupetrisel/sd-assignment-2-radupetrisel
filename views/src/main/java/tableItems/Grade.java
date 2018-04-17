@@ -1,11 +1,18 @@
 package tableItems;
 
-import java.util.Observable;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Grade extends Observable{
+public class Grade{
 	
 	private String course;
-	private String grade;
+	private int grade;
+	
+	@JsonCreator
+	public Grade(@JsonProperty("course") String course, @JsonProperty("grade") int grade) {
+		this.course = course;
+		this.grade = grade;
+	}
 	
 	public String getCourse() {
 		return course;
@@ -13,10 +20,14 @@ public class Grade extends Observable{
 	public void setCourse(String course) {
 		this.course = course;
 	}
-	public String getGrade() {
+	public int getGrade() {
 		return grade;
 	}
-	public void setGrade(String grade) {
+	public void setGrade(int grade) {
 		this.grade = grade;
+	}
+	
+	public String toString() {
+		return this.course + " " + this.grade;
 	}
 }

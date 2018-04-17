@@ -12,52 +12,74 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import bll.TeacherService;
+import bll.dtos.GroupDto;
 import bll.dtos.StudentDto;
+import bll.dtos.StudentReportDto;
 import bll.dtos.TeacherDto;
 
 @Controller
 @RequestMapping(value = "/teacher/{id}")
 public class TeacherController {
-	
+
 	@Autowired
 	private TeacherService service;
-	
+
 	@RequestMapping(value = "/profile", method = RequestMethod.GET)
 	public @ResponseBody TeacherDto viewProfile(@PathVariable("id") int id) {
-		
+
 		TeacherDto t = service.getProfile(id);
-	
+
 		return t;
 	}
 
 	@RequestMapping(value = "/updateAddress", method = RequestMethod.POST)
 	public @ResponseBody String updateAddress(@PathVariable int id, @RequestBody TeacherDto teacher) {
-		
+
 		service.updateAddress(id, teacher.getAddress());
-		
+
 		return "Address updated successfully!\n";
 	}
-	
+
 	@RequestMapping(value = "/createStudent", method = RequestMethod.POST)
 	public @ResponseBody String createStudent(@RequestBody StudentDto student) {
-		
+
 		service.createStudent(student);
-		
+
 		return "Success";
 	}
-	
+
 	@RequestMapping(value = "/updateStudent", method = RequestMethod.POST)
 	public @ResponseBody String updateStudentByCnp(@RequestBody StudentDto s) {
-		
+
 		service.updateStudentByCnp(s);
-		
+
 		return "Success";
 	}
-	
+
 	@RequestMapping(value = "/viewStudents", method = RequestMethod.GET)
-	public @ResponseBody List<StudentDto> viewStudents(@RequestParam("group") String group){
-		
-		return service.viewStudentsFromGroup(group);	
+	public @ResponseBody List<StudentDto> viewStudents(@RequestParam("group") String group) {
+
+		return service.viewStudentsFromGroup(group);
+	}
+
+	@RequestMapping(value = "/groups", method = RequestMethod.GET)
+	public @ResponseBody List<GroupDto> viewGroups() {
+
+		return service.viewGroups();
 	}
 	
+	@RequestMapping(value = "/gradeStudent", method = RequestMethod.POST)
+	public @ResponseBody String gradeStudent(@RequestBody StudentDto student) {
+		
+		service.gradeStudent(student);
+		
+		return "succes";
+	}
+	
+	@RequestMapping(value = "/saveReport", method = RequestMethod.POST)
+	public @ResponseBody String saveReport(@RequestBody StudentReportDto studentReport) {
+		service.saveReport(studentReport);
+		return "success";
+	}
+
 }

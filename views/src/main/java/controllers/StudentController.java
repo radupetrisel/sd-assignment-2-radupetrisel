@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import services.ColumnBuilder;
 import services.GradeConverter;
 import services.TableBuilder;
 import tableItems.Grade;
@@ -33,10 +34,20 @@ public class StudentController extends UserController {
 		window.setViewGradesHandler(e -> {
 
 			String data = get(basePath + "/viewGrades");
-			List<Grade> grades = new GradeConverter().convert(data);
+			List<Grade> grades = new GradeConverter().convertList(data);
 
-			TableView<Grade> table = new TableBuilder<Grade>().addColumn("Course", "course", false).addColumn("Grade", "grade", false)
-					.setEditable(false).setItems(grades).build();
+			TableView<Grade> table = new TableBuilder<Grade>()
+					.addColumn(new ColumnBuilder<Grade, String>()
+							.name("Course")
+							.cellValueFactory("course")
+							.build())
+					.addColumn(new ColumnBuilder<Grade, Integer>()
+							.name("Grade")
+							.cellValueFactory("grade")
+							.build())
+					.editable()
+					.setItems(grades)
+					.build();
 
 			viewGrades(table);
 		});

@@ -6,12 +6,12 @@ import dao.entities.Teacher;
 public class CourseDto {
 
 	private String name;
-	private String teacher;
+	private TeacherDto teacher;
 
 	public CourseDto(Course c) {
 		
 		this.name = c.getName();
-		this.teacher = c.getTeacher().getFirstName() + " " + c.getTeacher().getLastName();
+		this.teacher = new TeacherDto(c.getTeacher());
 	}
 	
 	public String getName() {
@@ -20,11 +20,11 @@ public class CourseDto {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getTeacher() {
+	public TeacherDto getTeacher() {
 		return teacher;
 	}
-	public void setTeacher(Teacher teacher) {
-		this.teacher = teacher.getFirstName() + " " + teacher.getLastName();
+	public void setTeacher(TeacherDto teacher) {
+		this.teacher = teacher;
 	}
 	
 	@Override

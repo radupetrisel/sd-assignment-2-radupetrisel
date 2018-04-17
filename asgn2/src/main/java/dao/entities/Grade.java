@@ -60,6 +60,7 @@ public class Grade{
 	
 	public void setStudent(Student s) {
 		this.student = s;
+		this.id.setStudentId(s.getId());
 	}
 	
 	public Course getCourse() {
@@ -68,6 +69,7 @@ public class Grade{
 	
 	public void setCourse(Course c) {
 		this.course = c;
+		this.id.setCourseId(c.getId());
 	}
 
 }

@@ -1,6 +1,5 @@
 package controllers;
 
-import javafx.stage.Stage;
 import views.LoginWindow;
 import views.StudentWindow;
 import views.TeacherWindow;

@@ -1,5 +1,8 @@
 package bll.builders;
 
+import java.util.List;
+
+import dao.entities.Course;
 import dao.entities.Group;
 import dao.entities.Student;
 
@@ -43,6 +46,11 @@ public class StudentBuilder{
 	
 	public StudentBuilder group(Group group) {
 		student.setGroup(group);
+		return this;
+	}
+	
+	public StudentBuilder courses(List<Course> courses) {
+		student.setCourses(courses);
 		return this;
 	}
 	

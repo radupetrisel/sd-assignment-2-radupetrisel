@@ -11,10 +11,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tableItems.Student;
 
-public class StudentConverter implements Converter{
-	
-	public List<Student> convert(String jsonData) {
-		
+public class StudentConverter implements Converter<Student> {
+
+	public List<Student> convertList(String jsonData) {
+
 		List<Student> students = new ArrayList<Student>(0);
 
 		try {
@@ -29,5 +29,16 @@ public class StudentConverter implements Converter{
 			e1.printStackTrace();
 		}
 		return students;
+	}
+
+	@Override
+	public Student convert(String data) {
+
+		try {
+			return new ObjectMapper().readValue(data, Student.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

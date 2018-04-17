@@ -23,9 +23,8 @@ public class StudentWindow extends UserWindow {
 		
 		enrol = new Button("Enrol");
 		viewGrades = new Button("View grades");
-		Button deleteProfile = new Button("Delete profile");
 		
-		right.getChildren().addAll(enrol, viewGrades, deleteProfile);
+		right.getChildren().addAll(enrol, viewGrades);
 		this.setRight(right);
 	}
 	

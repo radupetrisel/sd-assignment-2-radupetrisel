@@ -37,9 +37,14 @@ public class Student extends User{
 	}
 
 	public void setGrades(List<Grade> grades) {
-		this.grades = grades;
+		this.grades.clear();
+		
+		this.grades.addAll(grades);
 	}
 	
+	public void setCourses(List<Course> courses) {
+		courses.forEach(c -> this.addCourse(c));
+	}
 	@Transient
 	public void addCourse(Course c) {
 		

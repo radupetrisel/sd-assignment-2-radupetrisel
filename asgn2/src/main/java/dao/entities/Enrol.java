@@ -55,5 +55,9 @@ public class Enrol implements Serializable {
 	public int hashCode() {
 		return Objects.hash(studentId, courseId);
 	}
+	
+	public String toString() {
+		return this.studentId + " " + this.courseId;
+	}
 
 }

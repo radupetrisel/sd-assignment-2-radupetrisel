@@ -11,9 +11,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import tableItems.Grade;
 
-public class GradeConverter implements Converter{
+public class GradeConverter implements Converter<Grade>{
 
-	public List<Grade> convert(String jsonData) {
+	public List<Grade> convertList(String jsonData) {
 
 		List<Grade> grades = new ArrayList<Grade>(0);
 
@@ -29,5 +29,17 @@ public class GradeConverter implements Converter{
 			e1.printStackTrace();
 		}
 		return grades;
+	}
+
+	@Override
+	public Grade convert(String data) {
+		
+		try {
+			return new ObjectMapper().readValue(data, Grade.class);
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 }
