@@ -15,7 +15,6 @@ public class Requester {
 	
 	public static String post(String url, String json) {
 		
-		System.out.println(url);
 		RequestBody body = RequestBody.create(JSON, json);
 		
 		Request post = new Request.Builder().url(url).post(body).build();

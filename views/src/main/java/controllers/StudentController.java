@@ -1,97 +1,94 @@
 package controllers;
 
-import views.UserWindow;
+import static services.Requester.get;
+import static services.Requester.post;
 
-public class StudentController extends UserController{
+import java.util.List;
+import java.util.Map;
 
-	public StudentController(UserWindow u, int studentId) {
-		super(u, studentId);
-		this.basePath = "http://localhost:8083/asgn2/student";
-		
+import javafx.geometry.Pos;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import services.GradeConverter;
+import services.TableBuilder;
+import tableItems.Grade;
+import views.StudentWindow;
+
+public class StudentController extends UserController {
+
+	public StudentController(StudentWindow window, int studentId) {
+
+		super(window);
+		this.basePath = "http://localhost:8083/asgn2/student/" + studentId;
+
 		this.window.setTop(this.displayHelloMessage());
+		window.setViewGradesHandler(e -> {
+
+			String data = get(basePath + "/viewGrades");
+			List<Grade> grades = new GradeConverter().convert(data);
+
+			TableView<Grade> table = new TableBuilder<Grade>().addColumn("Course", "course", false).addColumn("Grade", "grade", false)
+					.setEditable(false).setItems(grades).build();
+
+			viewGrades(table);
+		});
 		
+		window.setEnrolHandler(e -> enrol());
+	}
+
+	private void viewGrades(TableView<Grade> table) {
+
+		window.setCenter(table);
 	}
 	
-//	private void deleteProfile() {
-//		
-//		Stage alert = new Stage();
-//		alert.initModality(Modality.APPLICATION_MODAL);
-//		alert.centerOnScreen();
-//		
-//		VBox box = new VBox();
-//		Scene scene = new Scene(box, 100, 100);
-//		box.setAlignment(Pos.CENTER);
-//		box.setSpacing(10);
-//		
-//		Text alertText = new Text("Are you sure?");
-//		Button yes = new Button("Yes");
-//		Button no = new Button("No");
-//		
-//		HBox textBox = new HBox();
-//		textBox.setAlignment(Pos.CENTER);
-//		
-//		HBox buttonBox = new HBox();
-//		buttonBox.setAlignment(Pos.CENTER);
-//		
-//		box.getChildren().addAll(textBox, buttonBox);
-//		
-//		textBox.getChildren().add(alertText);
-//		buttonBox.getChildren().addAll(yes, no);
-//		
-//		yes.setOnAction(e -> {
-//			(new StudentBL()).deleteStudent(userId);
-//			alert.close();
-//			new Login(this.window, 250, 300);
-//		});
-//		
-//		no.setOnAction(e -> alert.close());
-//		
-//		alert.setScene(scene);
-//		alert.showAndWait();
-//	}
-//
-//	private void viewGrades() {
-//		
-//		TableView<Grade> grades = new TableView<Grade>();
-//		
-//		grades.setEditable(false);
-//		
-//		TableColumn<Grade, String> course = new TableColumn<Grade, String>("Course");
-//		TableColumn<Grade, Integer> grade = new TableColumn<Grade, Integer>("Grade");
-//		
-//		course.setCellValueFactory(new PropertyValueFactory<Grade, String>("courseName"));
-//		grade.setCellValueFactory(new PropertyValueFactory<Grade, Integer>("grade"));
-//		
-//		grades.setItems(FXCollections.observableArrayList((new StudentBL()).viewGrades(userId)));
-//		
-//		grades.getColumns().addAll(course, grade);
-//		
-//		this.setCenter(grades);	
-//	}
-//
-//	private void enrol() {
-//		
-//		HBox box = new HBox();
-//		box.setAlignment(Pos.CENTER);
-//		box.setSpacing(10);
-//		
-//		Label courseNameLabel = new Label("Course ");
-//		TextField courseName = new TextField();
-//		Text success = new Text("Success");
-//		success.setFill(Color.GREEN);
-//		success.setVisible(false);
-//		
-//		box.setOnKeyPressed(e -> {
-//			
-//			if (e.getCode().equals(KeyCode.ENTER)) {
-//				
-//				(new StudentBL()).enrol(userId, courseName.getText());
-//				success.setVisible(true);
-//			}
-//		});
-//		
-//		box.getChildren().addAll(courseNameLabel, courseName, success);
-//		this.setCenter(box);
-//
-//	}
+	@Override
+	protected void viewProfile(Map<String, String> data) {
+		
+		super.viewProfile(data);
+		
+		Label groupLabel = new Label("Group: ");
+		groupLabel.setFont(Font.font("Verdana", FontWeight.BOLD, 12));
+		Text groupText = new Text(data.get("group"));
+		
+		HBox box = new HBox();
+		box.setAlignment(Pos.CENTER);
+		box.getChildren().addAll(groupLabel, groupText);
+		
+		((VBox)this.window.getCenter()).getChildren().add(box);
+	}
+
+	private void enrol() {
+
+		HBox box = new HBox();
+		box.setAlignment(Pos.CENTER);
+		box.setSpacing(10);
+
+		Label courseNameLabel = new Label("Course ");
+		TextField courseName = new TextField();
+		Text success = new Text("Success");
+		success.setFill(Color.GREEN);
+		success.setVisible(false);
+
+		box.setOnKeyPressed(e -> {
+
+			if (e.getCode().equals(KeyCode.ENTER)) {
+				
+				String body = post(basePath + "/enrol", courseName.getText());
+				System.out.println(body);
+				success.setVisible(true);
+			}
+		});
+
+		box.getChildren().addAll(courseNameLabel, courseName, success);
+		this.window.setCenter(box);
+
+	}
 }

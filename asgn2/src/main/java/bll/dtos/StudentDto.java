@@ -1,15 +1,14 @@
 package bll.dtos;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
-import dao.entities.Course;
 import dao.entities.Student;
 
 public class StudentDto extends UserDto {
 	
-	private List<CourseDto> courses;
+	private List<GradeDto> courses;
+	
+	private String group;
 	
 	public StudentDto() {
 		
@@ -17,23 +16,30 @@ public class StudentDto extends UserDto {
 	
 	public StudentDto(Student s) {
 		super(s);
-		this.courses = s.getCourses().stream().map(c -> new CourseDto(c)).collect(Collectors.toList());
-		
+		this.group = s.getGroup().getNumber();
 	}
 
-	public List<CourseDto> getCourses() {
+	public List<GradeDto> getCourses() {
 		return courses;
 	}
 
-	public void setCourses(List<CourseDto> courses) {
+	public void setCourses(List<GradeDto> courses) {
 		this.courses = courses;
 	}
 
 	@Override
 	public String toString() {
-		return "StudentDto [courses=" + courses + ", id=" + id + ", firstName=" + firstName + ", lastName=" + lastName
+		return "StudentDto [courses=" + courses + ", firstName=" + firstName + ", lastName=" + lastName
 				+ ", address=" + address + ", phoneNumber=" + phoneNumber + ", email=" + email + ", cnp=" + cnp
 				+ ", password=" + password + "]";
+	}
+
+	public String getGroup() {
+		return group;
+	}
+
+	public void setGroup(String group) {
+		this.group = group;
 	}
 
 }

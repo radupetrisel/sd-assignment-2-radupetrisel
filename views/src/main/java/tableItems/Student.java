@@ -1,32 +1,20 @@
-package bll.dtos;
+package tableItems;
 
-import dao.entities.User;
+import java.util.Observable;
 
-public abstract class UserDto {
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
-	protected String firstName;
-	protected String lastName;
-	protected String address;
-	protected String phoneNumber;
-	protected String email;
-	protected String cnp;
-	protected String password;
+@JsonIgnoreProperties(ignoreUnknown = true)
+public class Student extends Observable{
+
+	private String firstName;
+	private String lastName;
+	private String address;
+	private String phoneNumber;
+	private String email;
+	private String cnp;
+	private String password;
 	
-	public UserDto() {
-		
-	}
-	
-	public UserDto(User u) {
-		
-		this.firstName = u.getFirstName();
-		this.lastName = u.getLastName();
-		this.address = u.getAddress();
-		this.phoneNumber = u.getPhoneNumber();
-		this.email = u.getEmail();
-		this.cnp = u.getCnp();
-		this.password = u.getPassword();
-	}
-
 	public String getFirstName() {
 		return firstName;
 	}
@@ -48,15 +36,20 @@ public abstract class UserDto {
 	}
 
 	public void setAddress(String address) {
+		
+		
 		this.address = address;
+		notifyObservers();
 	}
-
+	
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
 	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
+
+		this.phoneNumber = phoneNumber;	
+		notifyObservers();
 	}
 
 	public String getEmail() {
@@ -64,7 +57,9 @@ public abstract class UserDto {
 	}
 
 	public void setEmail(String email) {
+
 		this.email = email;
+		notifyObservers();
 	}
 
 	public String getCnp() {
@@ -82,5 +77,4 @@ public abstract class UserDto {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
 }

@@ -1,24 +1,42 @@
 package dao.entities;
 
-import javax.persistence.AssociationOverride;
-import javax.persistence.AssociationOverrides;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
+import javax.persistence.FetchType;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
-import javax.persistence.Transient;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "grades")
-@AssociationOverrides({
-	@AssociationOverride(name = "id.student", joinColumns = @JoinColumn(name = "student_id")),
-	@AssociationOverride(name = "id.course", joinColumns = @JoinColumn(name = "course_id"))
-})
-public class Grade {
+public class Grade{
 	
 	@EmbeddedId
 	private Enrol id = new Enrol(); 
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@MapsId("student")
+	@JsonIgnore
+	private Student student;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@MapsId("course")
+	private Course course;
+	
+	@Column
+	private int grade = 0;
+	
+	public Grade() {}
+	
+	public Grade(Student student, Course course) {
+		this.student = student;
+		this.course = course;
+		id.setStudentId(student.getId());
+		id.setCourseId(course.getId());
+	}
 	
 	public Enrol getId() {
 		return id;
@@ -28,9 +46,6 @@ public class Grade {
 		this.id = id;
 	}
 	
-	@Column
-	private int grade;
-	
 	public int getGrade() {
 		return grade;
 	}
@@ -38,23 +53,21 @@ public class Grade {
 	public void setGrade(int grade) {
 		this.grade = grade;
 	}
-	
-	@Transient
+
 	public Student getStudent() {
-		return this.id.getStudent();
+		return this.student;
 	}
 	
 	public void setStudent(Student s) {
-		this.id.setStudent(s);
+		this.student = s;
 	}
 	
-	@Transient
 	public Course getCourse() {
-		return this.id.getCourse();
+		return this.course;
 	}
 	
 	public void setCourse(Course c) {
-		this.id.setCourse(c);
+		this.course = c;
 	}
 
 }

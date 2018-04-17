@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="asgn2/src/main/java"/>
+	<classpathentry kind="src" path="asgn2/src/test/java"/>
+	<classpathentry kind="src" path="views/src/main/java"/>
+	<classpathentry kind="lib" path="asgn2/.mvn/wrapper/maven-wrapper.jar"/>
+	<classpathentry kind="lib" path="asgn2/target/asgn2-0.0.1-SNAPSHOT.jar"/>
+	<classpathentry kind="output" path="asgn2/target/classes"/>
+</classpath>

@@ -112,6 +112,6 @@ public abstract class User {
 
 	public void setDeleted(boolean isDeleted) {
 		this.isDeleted = isDeleted;
-	}	
+	}
 
 }

@@ -1,20 +1,34 @@
 package app;
 
-import controllers.StudentController;
-import controllers.TeacherController;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import controllers.LoginController;
 import javafx.application.Application;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import views.StudentWindow;
-import views.TeacherWindow;
+import views.LoginWindow;
 
 public class App extends Application {
 
 	public static void main(String[] args) {
-
+		
+		JSONObject oj = null;
+		try {
+			
+			oj = new JSONObject()
+					.put("firstName", "Radu")
+					.put("lastName", "Petrisel")
+					.put("cnp", "1960920125844")
+					.put("address", "Azuga 3")
+					.put("phoneNumber", "0747673818")
+					.put("email", "radupetrisel@gmail.com");
+			
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		
+		//post("http://localhost:8083/asgn2/student/save", oj.toString());
+		
 		launch(args);
 	}
 
@@ -22,19 +36,8 @@ public class App extends Application {
 
 		primaryStage.centerOnScreen();
 
-		VBox box = new VBox();
-		Scene scene = new Scene(box, 300, 300);
+		new LoginController(new LoginWindow(primaryStage));
 		
-		Button studentWindow = new Button("Student");
-		Button teacherWindow = new Button("Teacher");
-		
-		box.getChildren().addAll(teacherWindow, studentWindow);
-		box.setAlignment(Pos.CENTER);
-		
-		studentWindow.setOnAction(e -> new StudentController(new StudentWindow(primaryStage), 1));
-		teacherWindow.setOnAction(e -> new TeacherController(new TeacherWindow(primaryStage), 1));
-		primaryStage.setScene(scene);
 		primaryStage.show();
-
 	}
 }

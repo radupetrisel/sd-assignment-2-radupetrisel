@@ -22,6 +22,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import views.LoginWindow;
 import views.UserWindow;
 
 public abstract class UserController {
@@ -31,14 +32,13 @@ public abstract class UserController {
 	protected String basePath;
 	
 	@SuppressWarnings("unchecked")
-	public UserController(UserWindow u, int userId) {
+	public UserController(UserWindow u) {
 		
 		this.window = u;
-		this.userId = userId;
-
+		
 		this.window.setViewProfileAction(e -> {
 			
-			String json = get(basePath + "/profile?id=1");
+			String json = get(basePath + "/profile");
 			
 			Map<String, String> data = null;
 			
@@ -52,12 +52,13 @@ public abstract class UserController {
 		});
 		
 		this.window.setUpdateAddressAction(e -> this.updateAddress());
+		this.window.setLogoutAction(e -> new LoginController(new LoginWindow(window.getStage())));
 		
 	}
 	
 	protected VBox displayHelloMessage() {
 		
-		String json = get(basePath + "/profile?id=1");
+		String json = get(basePath + "/profile");
 
 		Map<String, String> data = null;
 		
@@ -149,7 +150,6 @@ public abstract class UserController {
 				JSONObject jo = null;
 				try {
 					jo = new JSONObject()
-							.put("id", this.userId)
 							.put("address", newAddressField.getText());
 				} catch (JSONException e1) {
 					e1.printStackTrace();

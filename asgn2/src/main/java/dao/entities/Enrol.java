@@ -1,41 +1,59 @@
 package dao.entities;
 
 import java.io.Serializable;
+import java.util.Objects;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import javax.persistence.ManyToOne;
 
 @Embeddable
-public class Enrol implements Serializable{
-	
-	@ManyToOne
-	private Student student;
-	
-	@ManyToOne
-	private Course course;
+public class Enrol implements Serializable {
+
+	@Column(name = "student_id")
+	private int studentId;
+
+	@Column(name = "course_id")
+	private int courseId;
 
 	public Enrol() {
-		
+
 	}
 	
-	public Enrol(Student student, Course course) {
-		this.student = student;
-		this.course = course;
-	}
-	public Student getStudent() {
-		return student;
+	public Enrol(int studentId, int courseId) {
+		this.studentId = studentId;
+		this.courseId = courseId;
 	}
 
-	public void setStudent(Student student) {
-		this.student = student;
+	public int getStudentId() {
+		return studentId;
 	}
 
-	public Course getCourse() {
-		return course;
+	public void setStudentId(int studentId) {
+		this.studentId = studentId;
 	}
 
-	public void setCourse(Course course) {
-		this.course = course;
+	public int getCourseId() {
+		return courseId;
+	}
+
+	public void setCourseId(int courseId) {
+		this.courseId = courseId;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		
+		if (this == o) return true;
+		if (!(o instanceof Enrol)) return false;
+		
+		Enrol other = (Enrol)o;
+		
+		return other.getCourseId() == this.courseId && other.getStudentId() == this.studentId;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(studentId, courseId);
 	}
 
 }

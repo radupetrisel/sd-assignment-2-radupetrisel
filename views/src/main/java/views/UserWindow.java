@@ -52,6 +52,10 @@ public abstract class UserWindow {
 		this.window = window;
 	
 	}
+	
+	public Stage getStage() {
+		return this.window;
+	}
 
 	public void setLeft(Node left) {
 		this.layout.setLeft(left);
@@ -72,6 +76,10 @@ public abstract class UserWindow {
 	public void setCenter(Node center) {
 		this.layout.setCenter(center);
 	}
+	
+	public Node getCenter() {
+		return this.layout.getCenter();
+	}
 
 	public void setViewProfileAction(EventHandler<ActionEvent> e) {
 		this.viewProfile.setOnAction(e);
@@ -83,6 +91,10 @@ public abstract class UserWindow {
 	
 	public void setUpdateAddressAction(EventHandler<ActionEvent> e) {
 		this.updateAddress.setOnAction(e);
+	}
+	
+	public void setLogoutHandler(EventHandler<ActionEvent> e) {
+		this.logout.setOnAction(e);
 	}
 
 }
