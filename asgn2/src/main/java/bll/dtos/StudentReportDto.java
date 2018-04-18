@@ -1,27 +1,23 @@
 package bll.dtos;
 
-import java.time.LocalDateTime;
-
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import dao.entities.StudentReport;
 
 public class StudentReportDto {
 
 	private StudentDto student;
-	private LocalDateTime date;
+	
+	private String date;
 	
 	public StudentReportDto() {
 		
 	}
 	
 	@JsonCreator
-	public StudentReportDto(@JsonProperty("student") StudentDto student, @JsonProperty("date") LocalDateTime date) {
-		ObjectMapper mapper = new ObjectMapper();
-		 mapper.registerModule(new JavaTimeModule());
+	public StudentReportDto(@JsonProperty("student") StudentDto student, @JsonProperty("date") String date) {
+
 		this.student = student;
 		this.date = date;
 	}
@@ -39,11 +35,11 @@ public class StudentReportDto {
 		this.student = student;
 	}
 
-	public LocalDateTime getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDateTime date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	

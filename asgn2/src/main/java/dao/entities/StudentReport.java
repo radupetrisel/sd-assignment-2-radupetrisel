@@ -12,7 +12,7 @@ public class StudentReport {
 	private int id;
 	
 	private Student student;
-	private LocalDateTime date;
+	private String date;
 
 	@Override
 	public String toString() {
@@ -35,11 +35,11 @@ public class StudentReport {
 		this.student = student;
 	}
 
-	public LocalDateTime getDate() {
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(LocalDateTime date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	

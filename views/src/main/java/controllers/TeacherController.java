@@ -35,10 +35,10 @@ import javafx.util.converter.DefaultStringConverter;
 import services.ColumnBuilder;
 import services.GroupConverter;
 import services.StudentConverter;
-import services.StudentReport;
 import services.TableBuilder;
 import tableItems.Group;
 import tableItems.Student;
+import tableItems.StudentReport;
 import views.TeacherWindow;
 
 public class TeacherController extends UserController {
