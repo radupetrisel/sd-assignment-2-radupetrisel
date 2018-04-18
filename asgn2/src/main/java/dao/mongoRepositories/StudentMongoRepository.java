@@ -2,8 +2,8 @@ package dao.mongoRepositories;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import dao.entities.StudentReport;
+import bll.dtos.StudentReportDto;
 
-public interface StudentMongoRepository extends MongoRepository<StudentReport, Integer>{
+public interface StudentMongoRepository extends MongoRepository<StudentReportDto, Integer>{
 
 }

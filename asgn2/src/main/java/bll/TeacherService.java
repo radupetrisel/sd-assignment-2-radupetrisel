@@ -1,6 +1,7 @@
 package bll;
 
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,6 +116,6 @@ public class TeacherService {
 		sr.setStudent(s);
 		sr.setDate(studentReport.getDate());
 
-		studentMongoRepo.save(sr);
+		studentMongoRepo.save(studentReport);
 	}
 }
